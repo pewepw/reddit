@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit/features/auth/repository/auth_repository.dart';
+
+import '../../../core/utils.dart';
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
@@ -14,7 +17,11 @@ class AuthController {
     required AuthRepository authRepository,
   }) : _authRepository = authRepository;
 
-  void signInWithGoogle() {
-    _authRepository.signInWithGoogle();
+  void signInWithGoogle(BuildContext context) async {
+    final user = await _authRepository.signInWithGoogle();
+    user.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) => null,
+    );
   }
 }
